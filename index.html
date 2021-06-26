@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smiley Face Matching Game</title>
+  <style>
+    body {
+      background-color: #333
+
+    }
+
+    img {
+      position: absolute;
+    }
+
+    .leftSide, .rightSide {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+    }
+
+    .rightSide {
+      left: 500px;
+      border-left: 3px solid;
+    }
+
+    
+
+    .container-text {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #555;
+      width: 1000px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 12px;
+      border: 3px solid black;
+    }
+
+    .container h1 {
+      border-bottom: 3px solid black;
+    }
+
+  </style>
+</head>
+<body>
+    <div class="container-text">
+    <h1>Smiley Matching Game :D</h1>
+    <p>Rules: Find the extra smiley face on the left</p>
+    </div>
+    <div class="leftSide"></div>
+    <div class="rightSide"></div>
+
+  <script>
+    // Initialize Variables
+    let numberOfFaces = 5;
+    const theLeftSide = document.querySelector('.leftSide')
+    const theRightSide = document.querySelector('.rightSide')
+    const counter = document.querySelector('.count');
+
+    // Main function
+    const generateFaces = () => {
+
+      // Create faces
+      for(let i = 0; i <= numberOfFaces;i++) {
+
+        let face = document.createElement('img');
+        face.src = './smiley.png';
+
+        // Random positioning of faces
+        randomTop = Math.floor(Math.random() * 401) + 1;
+        randomLeft = Math.floor(Math.random() * 401) + 1;
+        face.style.top = randomTop + 'px';
+        face.style.left = randomLeft + 'px';
+
+        // Add faces to left div
+        theLeftSide.appendChild(face);
+      }
+
+      // Clone left side div and children
+      const leftSideImages = theLeftSide.cloneNode(true);
+
+      // Remove last child from left side to create game
+      leftSideImages.removeChild(leftSideImages.lastChild)
+
+      // Add cloned left div and children to right side minus 1 face
+      theRightSide.append(leftSideImages)
+
+      // Click listeners
+      theLeftSide.lastChild.addEventListener('click', nextLevel);
+
+      document.body.addEventListener('click', gameOver);
+    }
+
+    // Runs if you click the correct face
+    const nextLevel = () => {
+
+      // delete previous levels faces
+      while (theLeftSide.firstChild) {
+      theLeftSide.removeChild(theLeftSide.lastChild);
+      }
+      while (theRightSide.firstChild) {
+      theRightSide.removeChild(theRightSide.lastChild);
+      }
+
+      // add more faces for next level
+      event.stopPropagation();
+      numberOfFaces += 5;
+      generateFaces();
+    }
+
+    // runs if you dont click correct face
+    const gameOver = () => {
+
+      // alert user that you clicks the wrong face
+      alert('Game Over..');
+
+      // only runs click event once (i think ive never used this)
+      document.body.removeEventListener('click', gameOver);
+      document.body.removeEventListener('click', nextLevel);
+    }
+
+    // function call
+    generateFaces();
+  </script>
+</body>
+</html>
